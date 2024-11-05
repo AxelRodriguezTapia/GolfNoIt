@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BujeroScript : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class BujeroScript : MonoBehaviour
             {
                 //Debug.Log("La bola se ha eliminado porque superó la velocidad umbral.");
                 Destroy(other.gameObject);
+                SceneManager.LoadScene(id_Screen);
             }
             else
             {
