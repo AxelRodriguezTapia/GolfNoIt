@@ -7,13 +7,8 @@ public class PortalScript : MonoBehaviour
     private float portalCooldown = 0;
     private bool portalPermission = true;
 
-    // Referencias a los sistemas de partículas
-    private ParticleSystem[] particleSystems;
-
     private void Start()
     {
-        // Obtén todos los sistemas de partículas que están en este GameObject
-        particleSystems = gameObject.GetComponentsInChildren<ParticleSystem>();
     }
 
     private void Update()
@@ -26,14 +21,7 @@ public class PortalScript : MonoBehaviour
             // Durante el cooldown, desactivamos las partículas
             if (portalCooldown >= 2)
             {
-                // Reactivar las partículas
-                foreach (var ps in particleSystems)
-                {
-                    ps.Play();
-                    ps.Play();
-                    Debug.Log("Particula On");
-                }
-
+                
                 // Reactivar el portal
                 otroPortal.gameObject.GetComponent<PortalScript>().setPermission(true);
                 setPermission(true);
@@ -69,13 +57,6 @@ public class PortalScript : MonoBehaviour
     // Método para teletransportar la pelota
     private void Teletransportar(Transform pelota, Rigidbody2D rb)
     {
-        // Desactivar las partículas durante el teletransporte
-        foreach (var ps in particleSystems)
-        {
-            ps.Stop();
-            Debug.Log("Particula Off");
-        }
-
         // Desactiva el permiso del otro portal
         otroPortal.gameObject.GetComponent<PortalScript>().setPermission(false);
         setPermission(false);
