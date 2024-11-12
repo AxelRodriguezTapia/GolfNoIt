@@ -40,7 +40,7 @@ public class BallScript : MonoBehaviour
         Vector2 velocity = GetComponent<Rigidbody2D>().velocity;
 
         // Debug.Log(velocity.magnitude);
-        if (velocity.magnitude <= 0.02)
+        if (velocity.magnitude <= 0.08)
         {
             velocity = new Vector2(0, 0);
             lineRenderer.enabled=true;
@@ -48,7 +48,7 @@ public class BallScript : MonoBehaviour
             lineRenderer.enabled=false;
         }
 
-        if (velocity.magnitude <= 0.02)
+        if (velocity.magnitude <= 0.08)
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -69,6 +69,8 @@ public class BallScript : MonoBehaviour
             {
                 // Aplica la fuerza en la dirección calculada
                 GetComponent<Rigidbody2D>().AddForce(direction * (force * speed), ForceMode2D.Impulse);
+                GameManager.Instance.AddScore(1);  // Añade 10 puntos al puntaje
+                Debug.Log("Score: "+GameManager.Instance.getScore());
                 Invoke("resetForce", 2);
             }
         }
