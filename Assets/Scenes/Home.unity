@@ -823,7 +823,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -166.78085, w: -168.17073}
+  m_margin: {x: 0, y: 0, z: -166.78085, w: -182.94296}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1078,7 +1078,6 @@ MonoBehaviour:
   nameInputField: {fileID: 322951585}
   submitButton: {fileID: 1905590210}
   rankingText: {fileID: 1077153842}
-  lastScreen: 
 --- !u!4 &1271019637
 Transform:
   m_ObjectHideFlags: 0

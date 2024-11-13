@@ -3,6 +3,9 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
+using Firebase;
+using Firebase.Database;
+using Firebase.Extensions;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,6 +22,10 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI rankingText;
 
     private string playerName;
+    private bool isFirebaseInitialized = false; // Bandera para saber si Firebase se inicializó correctamente
+
+    // Firebase variables
+    private static DatabaseReference dbReference;
 
     private void Awake()
     {
@@ -35,6 +42,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        // Inicializar Firebase
+        iniciarFirebase();
+
         if (SceneManager.GetActiveScene().name == "Home")
         {
             DisplayRanking();
@@ -69,6 +79,9 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha3)) SceneManager.LoadScene("Level3");
         if (Input.GetKeyDown(KeyCode.Alpha4)) SceneManager.LoadScene("Level4");
         if (Input.GetKeyDown(KeyCode.Alpha5)) SceneManager.LoadScene("Level5");
+        if(SceneManager.GetActiveScene().name=="Home"){
+            DisplayRanking();
+        }
     }
 
     private bool IsObjectVisible(GameObject obj)
@@ -121,7 +134,7 @@ public class GameManager : MonoBehaviour
             scoreText = GameObject.FindWithTag("Score").GetComponent<TextMeshProUGUI>();
             mainCamera = Camera.main;
             UpdateScoreText();
-        }else{
+        } else {
             DisplayRanking();
             submitButton = GameObject.FindWithTag("StartButton").GetComponent<Button>();
             nameInputField = GameObject.FindWithTag("EnterNameSpace").GetComponent<TMP_InputField>();
@@ -153,47 +166,96 @@ public class GameManager : MonoBehaviour
         }
     }
 
+   private void iniciarFirebase()
+{
+    FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
+    {
+        if (task.Result == Firebase.DependencyStatus.Available)
+        {
+            FirebaseApp app = FirebaseApp.DefaultInstance;
+            FirebaseDatabase firebaseDatabase = FirebaseDatabase.GetInstance(app);
+            firebaseDatabase.SetPersistenceEnabled(true);  // Habilita la persistencia si es necesario
+            dbReference = firebaseDatabase.RootReference;
+            isFirebaseInitialized = true;  // Establecer que Firebase se ha inicializado correctamente
+            Debug.Log("Firebase inicializado correctamente y base de datos configurada.");
+        }
+        else
+        {
+            Debug.LogError("Firebase no está disponible: " + task.Result.ToString());
+        }
+    });
+}
+
+
+    // Método para guardar el puntaje en Firebase
     public void SaveScore()
     {
-        List<(string, int)> ranking = LoadRanking();
-        ranking.Add((playerName, playerScore));
-
-        ranking.Sort((x, y) => x.Item2.CompareTo(y.Item2));
-        if (ranking.Count > 5) ranking.RemoveAt(5);
-
-        for (int i = 0; i < ranking.Count; i++)
+        if (!string.IsNullOrEmpty(playerName))
         {
-            PlayerPrefs.SetString($"RankingName{i}", ranking[i].Item1);
-            PlayerPrefs.SetInt($"RankingScore{i}", ranking[i].Item2);
-        }
-        PlayerPrefs.Save();
-    }
-
-    private List<(string, int)> LoadRanking()
-    {
-        List<(string, int)> ranking = new List<(string, int)>();
-        for (int i = 0; i < 5; i++)
-        {
-            if (PlayerPrefs.HasKey($"RankingName{i}") && PlayerPrefs.HasKey($"RankingScore{i}"))
+            // Guardar puntaje en Firebase
+            dbReference.Child("ranking").Child(playerName).SetValueAsync(playerScore).ContinueWithOnMainThread(task =>
             {
-                string name = PlayerPrefs.GetString($"RankingName{i}");
-                int score = PlayerPrefs.GetInt($"RankingScore{i}");
-                ranking.Add((name, score));
-            }
+                if (task.IsCompleted)
+                {
+                    Debug.Log("Puntaje guardado exitosamente en Firebase.");
+                }
+                else
+                {
+                    Debug.LogError("Error al guardar el puntaje: " + task.Exception);
+                }
+            });
         }
-        return ranking;
     }
 
-    private void DisplayRanking()
+    // Método para cargar el ranking desde Firebase
+   private void DisplayRanking()
+{
+    if (!isFirebaseInitialized)
     {
-        rankingText = GameObject.FindWithTag("Ranking").GetComponent<TextMeshProUGUI>();
-        List<(string, int)> ranking = LoadRanking();
-        rankingText.text = "Top 5 Players:\n";
-        for (int i = 0; i < ranking.Count; i++)
-        {
-            rankingText.text += $"{i + 1}. {ranking[i].Item1} - {ranking[i].Item2} hits\n";
-        }
+        Debug.LogError("Firebase no está inicializado correctamente.");
+        return;
     }
+
+    if (dbReference == null)
+    {
+        Debug.LogError("La referencia de la base de datos no está inicializada.");
+        return;
+    }
+
+    rankingText = GameObject.FindWithTag("Ranking")?.GetComponent<TextMeshProUGUI>();
+
+    if (rankingText != null)
+    {
+        rankingText.text = "Top 5 Players:\n";
+
+        dbReference.Child("ranking").OrderByValue().LimitToFirst(5).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted && task.Result.Exists)
+            {
+                List<string> rankingEntries = new List<string>();
+                foreach (var entry in task.Result.Children)
+                {
+                    string name = entry.Key;
+                    int score = int.Parse(entry.Value.ToString());
+                    rankingEntries.Add($"{name} - {score} hits"); // Agregar al final para mantener el orden ascendente
+                }
+
+                // Mostrar los jugadores ordenados de menor a mayor puntaje
+                rankingText.text = "Top 5 Players:\n" + string.Join("\n", rankingEntries);
+            }
+            else
+            {
+                Debug.LogError("Error al cargar el ranking o no existen datos: " + task.Exception);
+            }
+        });
+    }
+    else
+    {
+        Debug.LogError("No se encontró el objeto con el tag 'Ranking' o el componente TextMeshProUGUI.");
+    }
+}
+
+
 
     public void EndGame()
     {

@@ -1712,6 +1712,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4756580132261598677, guid: 7b27b1d4a53f1614b83feff312092885, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7588233907258733082, guid: 7b27b1d4a53f1614b83feff312092885, type: 3}
       propertyPath: m_Name
       value: Bujero
@@ -1764,6 +1768,10 @@ PrefabInstance:
     - target: {fileID: 5297339899584874354, guid: 9a291cccade8acb42a8263950ff05500, type: 3}
       propertyPath: m_TagString
       value: Ball
+      objectReference: {fileID: 0}
+    - target: {fileID: 5603059613010654933, guid: 9a291cccade8acb42a8263950ff05500, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7327896458695515016, guid: 9a291cccade8acb42a8263950ff05500, type: 3}
       propertyPath: m_LocalPosition.x

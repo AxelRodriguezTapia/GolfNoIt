@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1048939899110",
+    "firebase_url": "https://golfnoitgame-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "golfnoitgame",
+    "storage_bucket": "golfnoitgame.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1048939899110:android:0c9a9222202bc0569b3327",
+        "android_client_info": {
+          "package_name": "com.warloise.golfnoit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4_AwMQpvomsKLP_7bV_GVQaplnq3mn2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3007,6 +3007,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Ball
       objectReference: {fileID: 0}
+    - target: {fileID: 5603059613010654933, guid: 9a291cccade8acb42a8263950ff05500, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7327896458695515016, guid: 9a291cccade8acb42a8263950ff05500, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.24
