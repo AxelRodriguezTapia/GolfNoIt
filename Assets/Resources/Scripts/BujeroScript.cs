@@ -7,9 +7,11 @@ public class BujeroScript : MonoBehaviour
 {
     // Start is called before the first frame update
     public string id_Screen;
+    private GameManager gm;
+    
     void Start()
     {
-        
+        gm = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -26,13 +28,14 @@ public class BujeroScript : MonoBehaviour
             float speedThreshold = 1.5f; 
             if (velocity.magnitude < speedThreshold)
             {
-                //Debug.Log("La bola se ha eliminado porque superó la velocidad umbral.");
-                Destroy(other.gameObject);
-                SceneManager.LoadScene(id_Screen);
-            }
-            else
-            {
-                //Debug.Log("La bola no se eliminó porque no superó la velocidad umbral.");
+                if(id_Screen=="Home"){
+                    gm.EndGame();
+                }else{
+                    //Debug.Log("La bola se ha eliminado porque superó la velocidad umbral.");
+                    Destroy(other.gameObject);
+                    SceneManager.LoadScene(id_Screen);
+                }
+                
             }
         }
     }

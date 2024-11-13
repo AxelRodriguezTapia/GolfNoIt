@@ -10824,7 +10824,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8092924589264009064, guid: 7b27b1d4a53f1614b83feff312092885, type: 3}
       propertyPath: id_Screen
-      value: Level1
+      value: Home
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10873,11 +10873,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7327896458695515016, guid: 9a291cccade8acb42a8263950ff05500, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.93
+      value: 12.87
       objectReference: {fileID: 0}
     - target: {fileID: 7327896458695515016, guid: 9a291cccade8acb42a8263950ff05500, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.13
+      value: -0.93
       objectReference: {fileID: 0}
     - target: {fileID: 7327896458695515016, guid: 9a291cccade8acb42a8263950ff05500, type: 3}
       propertyPath: m_LocalPosition.z
